@@ -1,6 +1,7 @@
 package com.efhh.bibliotecavirtual.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Entity
@@ -10,10 +11,13 @@ public class Libro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idLibro;
 
+    @Size(min = 3,message = "Titulo debe tener minimo 3 caracteres")
     @Column(name="titulo",nullable = false,length = 100)
     private String titulo;
+    @Size(min = 3,message = "Slug debe tener minimo 3 caracteres")
     @Column(name="slug",nullable = false,length = 100)
     private String slug;
+    @Size(min = 3,message = "Descripcion debe tener minimo 3 caracteres")
     @Column(name="descripcion",nullable = false,length = 200)
     private String descripcion;
 

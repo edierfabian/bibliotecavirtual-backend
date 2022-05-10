@@ -1,17 +1,20 @@
 package com.efhh.bibliotecavirtual.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
 
+@Entity
 public class Usuario {
 
     @Id
     private Integer idUsuario;
+
     @Column(name="nombre",nullable = false)
     private String nombre;
     @Column(name="apellidos",nullable = false)
     private String apellidos;
-    
+    @Email
     @Column(name="email",nullable = false,unique = true)
     private String email;
     @Column(name="password",nullable = false)

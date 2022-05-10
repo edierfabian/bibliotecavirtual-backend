@@ -10,5 +10,5 @@ public interface ILibroService {
     Libro modificar(Libro libro) throws Exception;
     List<Libro> listar() throws Exception;
     Libro listarPorId(Integer id) throws Exception;
-    void eliminar(Integer id) throws Exception;
+    Libro eliminar(Integer id) throws Exception;
 }

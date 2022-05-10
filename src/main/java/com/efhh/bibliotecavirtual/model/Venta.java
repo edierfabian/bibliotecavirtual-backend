@@ -14,6 +14,7 @@ public class Venta {
     @JoinColumn(name = "id_usuario", nullable = false,foreignKey =@ForeignKey (name="FK_venta_usuario"))
     private Usuario usuario;
 
+
     public Integer getIdVenta() {
         return idVenta;
     }
