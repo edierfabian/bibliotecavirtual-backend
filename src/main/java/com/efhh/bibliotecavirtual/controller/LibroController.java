@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -32,11 +34,20 @@ public class LibroController {
         }
         return new ResponseEntity<Libro>(libroPorId,HttpStatus.OK);
     }
-    @PostMapping
+  /*  @PostMapping
     public ResponseEntity<Libro>  registrar(@Valid @RequestBody Libro libro) throws Exception {
         Libro libroRegistrar=libroService.registrar(libro);
 
         return  new ResponseEntity<Libro>(libroRegistrar,HttpStatus.CREATED);
+    }*/
+
+    @PostMapping
+    public ResponseEntity<Libro>  registrar(@Valid @RequestBody Libro libro) throws Exception {
+
+        Libro libroRegistrar=libroService.registrar(libro);
+        URI location= ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(libroRegistrar.getIdLibro()).toUri();
+
+        return   ResponseEntity.created(location).build();
     }
     @PutMapping
     public ResponseEntity<Libro> modificar(@Valid @RequestBody Libro libro) throws Exception {
