@@ -4,10 +4,15 @@ import com.efhh.bibliotecavirtual.exception.ModeloNotFoundException;
 import com.efhh.bibliotecavirtual.model.Libro;
 import com.efhh.bibliotecavirtual.service.ILibroService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import javax.persistence.EntityNotFoundException;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -27,13 +32,14 @@ public class LibroController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Libro> listarPorID(@PathVariable("id")Integer id) throws Exception {
+    public ResponseEntity<Libro> listarPorId(@PathVariable("id")Integer id) throws Exception {
         Libro libroPorId=libroService.listarPorId(id);
         if(libroPorId.getIdLibro()==null){
             throw new ModeloNotFoundException("Id No Encontrado: "+id);
         }
         return new ResponseEntity<Libro>(libroPorId,HttpStatus.OK);
     }
+
   /*  @PostMapping
     public ResponseEntity<Libro>  registrar(@Valid @RequestBody Libro libro) throws Exception {
         Libro libroRegistrar=libroService.registrar(libro);
@@ -41,19 +47,51 @@ public class LibroController {
         return  new ResponseEntity<Libro>(libroRegistrar,HttpStatus.CREATED);
     }*/
 
+    @GetMapping("/hateos/{id}")
+    public EntityModel<Libro> listarPorIdHateos(@PathVariable("id") Integer id) throws Exception{
+        Libro listarPorIdHateos=libroService.listarPorId(id);
+        if(listarPorIdHateos.getIdLibro()==null){
+            throw new ModeloNotFoundException("Id No Encontrado: "+id);
+        }
+        EntityModel<Libro> recursoLibroHateos=EntityModel.of(listarPorIdHateos);
+        WebMvcLinkBuilder link=linkTo(methodOn(this.getClass()).listarPorId(id));
+        recursoLibroHateos.add(link.withRel("libro-recurso"));
+        return recursoLibroHateos;
+
+    }
+
     @PostMapping
-    public ResponseEntity<Libro>  registrar(@Valid @RequestBody Libro libro) throws Exception {
+    public ResponseEntity<Libro>  registrarLibro(@Valid @RequestBody Libro libro) throws Exception {
 
         Libro libroRegistrar=libroService.registrar(libro);
         URI location= ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(libroRegistrar.getIdLibro()).toUri();
 
         return   ResponseEntity.created(location).build();
     }
-    @PutMapping
-    public ResponseEntity<Libro> modificar(@Valid @RequestBody Libro libro) throws Exception {
-        Libro libroModificar=libroService.registrar(libro);
+   @PutMapping
+    public ResponseEntity<Libro> modificarLibro(@Valid @RequestBody Libro libroForm) throws Exception {
+
+       Libro libroModificar=libroService.modificar(libroForm);
 
         return  new ResponseEntity<Libro>(libroModificar,HttpStatus.OK);
+
+
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Libro> modificarLibro2(@PathVariable("id") Integer id, @RequestBody Libro libroForm) throws Exception {
+    
+
+        Libro libroModificar=libroService.listarPorId(id);
+        if(libroModificar.getIdLibro()==null){
+            throw new ModeloNotFoundException("Id No Encontrado: "+id);
+        }
+        libroModificar.setTitulo(libroForm.getTitulo());
+        libroModificar.setSlug(libroForm.getSlug());
+        libroModificar.setDescripcion(libroForm.getDescripcion());
+        libroModificar.setPrecio(libroForm.getPrecio());
+
+        return  new ResponseEntity<>(libroService.modificar(libroModificar),HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -65,7 +103,11 @@ public class LibroController {
         }
         libroService.eliminar(id);
         return  new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+
+
     }
+
+
 
 
 }

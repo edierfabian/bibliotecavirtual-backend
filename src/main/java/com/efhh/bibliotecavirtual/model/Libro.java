@@ -26,6 +26,9 @@ public class Libro {
     @Column(name="fechaCreacion")
     private LocalDateTime fechaCreacion;
 
+    @Column(name="fechaActualizacion")
+    private LocalDateTime fechaActualizacion;
+
 
     public Integer getIdLibro() {
         return idLibro;
@@ -71,13 +74,26 @@ public class Libro {
         return fechaCreacion;
     }
 
+    public LocalDateTime getFechaActualizacion() {
+        return fechaActualizacion;
+    }
+
     public void setFechaCreacion(LocalDateTime fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
+    }
+
+    public void setFechaActualizacion(LocalDateTime fechaActualizacion) {
+        this.fechaActualizacion = fechaActualizacion;
     }
 
     @PrePersist
     private void asignarFechaCreacion() {
         fechaCreacion = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    private void asignarFechaActualizacion() {
+        fechaActualizacion = LocalDateTime.now();
     }
 
 }

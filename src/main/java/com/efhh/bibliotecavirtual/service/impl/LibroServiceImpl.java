@@ -1,7 +1,8 @@
-package com.efhh.bibliotecavirtual.service;
+package com.efhh.bibliotecavirtual.service.impl;
 
 import com.efhh.bibliotecavirtual.model.Libro;
 import com.efhh.bibliotecavirtual.repository.ILibroRepository;
+import com.efhh.bibliotecavirtual.service.ILibroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,15 @@ public class LibroServiceImpl implements ILibroService {
     @Override
     public List<Libro> listar() throws Exception {
         return libroRepository.findAll();
+    }
+
+    @Override
+    public Optional<Libro> listarPorIdOptional(Integer id) {
+        Optional<Libro> op= libroRepository.findById(id);
+        if(op.isPresent()){
+            return Optional.empty();
+        }
+        return op;
     }
 
     @Override
