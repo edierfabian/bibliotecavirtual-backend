@@ -4,6 +4,8 @@ import com.efhh.bibliotecavirtual.model.Libro;
 import com.efhh.bibliotecavirtual.repository.ILibroRepository;
 import com.efhh.bibliotecavirtual.service.ILibroService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,6 +38,11 @@ public class LibroServiceImpl implements ILibroService {
             return Optional.empty();
         }
         return op;
+    }
+
+    @Override
+    public Page<Libro> listarPageable(Pageable pageable) {
+        return libroRepository.findAll(pageable);
     }
 
     @Override

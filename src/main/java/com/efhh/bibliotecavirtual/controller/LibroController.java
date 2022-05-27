@@ -4,6 +4,10 @@ import com.efhh.bibliotecavirtual.exception.ModeloNotFoundException;
 import com.efhh.bibliotecavirtual.model.Libro;
 import com.efhh.bibliotecavirtual.service.ILibroService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
@@ -68,7 +72,7 @@ public class LibroController {
 
         return   ResponseEntity.created(location).build();
     }
-   @PutMapping
+   /*@PutMapping
     public ResponseEntity<Libro> modificarLibro(@Valid @RequestBody Libro libroForm) throws Exception {
 
        Libro libroModificar=libroService.modificar(libroForm);
@@ -76,11 +80,10 @@ public class LibroController {
         return  new ResponseEntity<Libro>(libroModificar,HttpStatus.OK);
 
 
-    }
+    }*/
 
     @PutMapping("/{id}")
     public ResponseEntity<Libro> modificarLibro2(@PathVariable("id") Integer id, @RequestBody Libro libroForm) throws Exception {
-    
 
         Libro libroModificar=libroService.listarPorId(id);
         if(libroModificar.getIdLibro()==null){
@@ -107,6 +110,11 @@ public class LibroController {
 
     }
 
+    @GetMapping("/pageable")
+    public ResponseEntity<Page<Libro>> listarPageable(Pageable pageable) throws Exception{
+        Page<Libro> listarLibroPageable = libroService.listarPageable(pageable);
+        return new ResponseEntity<Page<Libro>>(listarLibroPageable, HttpStatus.OK);
+    }
 
 
 
