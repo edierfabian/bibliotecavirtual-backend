@@ -66,21 +66,12 @@ public class LibroController {
 
     @PostMapping
     public ResponseEntity<Libro>  registrarLibro(@Valid @RequestBody Libro libro) throws Exception {
-
+        
         Libro libroRegistrar=libroService.registrar(libro);
         URI location= ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(libroRegistrar.getIdLibro()).toUri();
 
         return   ResponseEntity.created(location).build();
     }
-   /*@PutMapping
-    public ResponseEntity<Libro> modificarLibro(@Valid @RequestBody Libro libroForm) throws Exception {
-
-       Libro libroModificar=libroService.modificar(libroForm);
-
-        return  new ResponseEntity<Libro>(libroModificar,HttpStatus.OK);
-
-
-    }*/
 
     @PutMapping("/{id}")
     public ResponseEntity<Libro> modificarLibro2(@PathVariable("id") Integer id, @RequestBody Libro libroForm) throws Exception {
