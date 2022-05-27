@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 public class Usuario {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
     private Integer idUsuario;
 
     @Column(name="nombre",nullable = false)
@@ -25,6 +27,11 @@ public class Usuario {
 
     @Column(name="fechaRegistro")
     private LocalDateTime fechaRegistro;
+
+    @Column(name="fechaActuaUsuario")
+    private LocalDateTime fechaActuaUsuario;
+
+
 
     public Integer getIdUsuario() {
         return idUsuario;
@@ -82,8 +89,21 @@ public class Usuario {
         this.fechaRegistro = fechaRegistro;
     }
 
+    public LocalDateTime getFechaActuaUsuario() {
+        return fechaActuaUsuario;
+    }
+
+    public void setFechaActuaUsuario(LocalDateTime fechaActuaUsuario) {
+        this.fechaActuaUsuario = fechaActuaUsuario;
+    }
+
     @PrePersist
     private void asignarValoresAntesDePersistir() {
         fechaRegistro = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    private void asignarFechaActuaUsuario() {
+        fechaActuaUsuario = LocalDateTime.now();
     }
 }

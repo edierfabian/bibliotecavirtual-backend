@@ -16,5 +16,5 @@ public interface ILibroService {
     Page<Libro> listarPageable(Pageable pageable);
 
     Libro listarPorId(Integer id) throws Exception;
-    Libro eliminar(Integer id) throws Exception;
+    void eliminar(Integer id) throws Exception;
 }

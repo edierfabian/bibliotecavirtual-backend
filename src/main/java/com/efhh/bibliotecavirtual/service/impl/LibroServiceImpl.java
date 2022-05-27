@@ -52,8 +52,7 @@ public class LibroServiceImpl implements ILibroService {
     }
 
     @Override
-    public Libro eliminar(Integer id) throws Exception {
+    public void eliminar(Integer id) throws Exception {
         libroRepository.deleteById(id);
-        return null;
     }
 }
