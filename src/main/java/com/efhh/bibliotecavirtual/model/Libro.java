@@ -22,6 +22,9 @@ public class Libro {
 
     @Column(name="precio",nullable = false)
     private Float precio;
+
+    private String rutaPortada;
+    private String rutaArchivo;
     @Column(name="fechaCreacion")
     private LocalDateTime fechaCreacion;
 

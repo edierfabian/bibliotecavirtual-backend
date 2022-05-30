@@ -2,6 +2,8 @@ package com.efhh.bibliotecavirtual.model;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
+
 @Entity
 public class Venta {
 
@@ -10,9 +12,15 @@ public class Venta {
     private Integer idVenta;
     private LocalDateTime fecha;
     private Float total;
+
+    @Enumerated(EnumType.STRING)
+    private Estado estado;
     @ManyToOne
     @JoinColumn(name = "id_usuario", nullable = false,foreignKey =@ForeignKey (name="FK_venta_usuario"))
     private Usuario usuario;
+
+    @OneToMany(mappedBy = "venta",cascade = CascadeType.ALL)
+    private List<ItemVenta> items;
 
 
     public Integer getIdVenta() {
@@ -45,5 +53,21 @@ public class Venta {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
+
+    public List<ItemVenta> getItems() {
+        return items;
+    }
+
+    public void setItems(List<ItemVenta> items) {
+        this.items = items;
     }
 }

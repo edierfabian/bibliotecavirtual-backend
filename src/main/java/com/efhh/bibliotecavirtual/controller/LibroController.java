@@ -1,8 +1,11 @@
 package com.efhh.bibliotecavirtual.controller;
 
+import com.efhh.bibliotecavirtual.dto.LibroDTO;
 import com.efhh.bibliotecavirtual.exception.ModeloNotFoundException;
 import com.efhh.bibliotecavirtual.model.Libro;
 import com.efhh.bibliotecavirtual.service.ILibroService;
+import com.efhh.bibliotecavirtual.service.impl.LibroServiceImpl;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -65,16 +68,18 @@ public class LibroController {
     }
 
     @PostMapping
-    public ResponseEntity<Libro>  registrarLibro(@Valid @RequestBody Libro libro) throws Exception {
-        
+    public ResponseEntity<LibroDTO>  registrarLibroModelMapper(@Valid @RequestBody LibroDTO libroDTO) throws Exception {
+
+        Libro libro=new ModelMapper().map(libroDTO,Libro.class);
         Libro libroRegistrar=libroService.registrar(libro);
+
         URI location= ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(libroRegistrar.getIdLibro()).toUri();
 
         return   ResponseEntity.created(location).build();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Libro> modificarLibro2(@PathVariable("id") Integer id, @RequestBody Libro libroForm) throws Exception {
+   /* @PutMapping("/{id}")
+    public ResponseEntity<Libro> modificarLibro(@PathVariable("id") Integer id, @RequestBody Libro libroForm) throws Exception {
 
         Libro libroModificar=libroService.listarPorId(id);
         if(libroModificar.getIdLibro()==null){
@@ -86,7 +91,26 @@ public class LibroController {
         libroModificar.setPrecio(libroForm.getPrecio());
 
         return  new ResponseEntity<>(libroService.modificar(libroModificar),HttpStatus.OK);
+    }*/
+
+    @PutMapping("/{id}")
+    public ResponseEntity<LibroDTO> modificarLibro(@PathVariable("id") Integer id, @RequestBody LibroDTO libroDTO) throws Exception {
+
+       Libro libroModificar=libroService.listarPorId(id);
+        if(libroModificar.getIdLibro()==null){
+            throw new ModeloNotFoundException("Id No Encontrado: "+id);
+        }
+        new ModelMapper().map(libroDTO,libroModificar);
+        Libro libro=libroService.modificar(libroModificar);
+        new ModelMapper().map(libro,libroDTO);
+        return ResponseEntity.ok().body(libroDTO);
+
+
     }
+
+
+
+
 
     @DeleteMapping("/{id}")
     public  ResponseEntity<Void> eliminar(@PathVariable("id")Integer id) throws Exception {
