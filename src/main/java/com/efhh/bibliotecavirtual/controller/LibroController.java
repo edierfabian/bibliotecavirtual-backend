@@ -15,6 +15,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -68,7 +69,7 @@ public class LibroController {
     }
 
     @PostMapping
-    public ResponseEntity<LibroDTO>  registrarLibroModelMapper(@Valid @RequestBody LibroDTO libroDTO) throws Exception {
+    public ResponseEntity<LibroDTO>  registrarLibroModelMapper(@Validated @RequestBody LibroDTO libroDTO) throws Exception {
 
         Libro libro=new ModelMapper().map(libroDTO,Libro.class);
         Libro libroRegistrar=libroService.registrar(libro);
@@ -94,13 +95,14 @@ public class LibroController {
     }*/
 
     @PutMapping("/{id}")
-    public ResponseEntity<LibroDTO> modificarLibro(@PathVariable("id") Integer id, @RequestBody LibroDTO libroDTO) throws Exception {
+    public ResponseEntity<LibroDTO> modificarLibro(@Validated @PathVariable("id") Integer id, @RequestBody LibroDTO libroDTO) throws Exception {
 
        Libro libroModificar=libroService.listarPorId(id);
         if(libroModificar.getIdLibro()==null){
             throw new ModeloNotFoundException("Id No Encontrado: "+id);
         }
         new ModelMapper().map(libroDTO,libroModificar);
+
         Libro libro=libroService.modificar(libroModificar);
         new ModelMapper().map(libro,libroDTO);
         return ResponseEntity.ok().body(libroDTO);

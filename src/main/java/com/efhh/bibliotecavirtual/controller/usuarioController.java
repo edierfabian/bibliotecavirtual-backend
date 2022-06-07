@@ -1,10 +1,12 @@
 package com.efhh.bibliotecavirtual.controller;
 
+import com.efhh.bibliotecavirtual.dto.UsuarioDTO;
 import com.efhh.bibliotecavirtual.exception.ModeloNotFoundException;
 import com.efhh.bibliotecavirtual.model.Libro;
 import com.efhh.bibliotecavirtual.model.Usuario;
 import com.efhh.bibliotecavirtual.service.ILibroService;
 import com.efhh.bibliotecavirtual.service.IUsuarioService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -58,8 +60,12 @@ public class usuarioController {
 
     }
 
+
     @PostMapping
-    public ResponseEntity<Usuario>  registrarUsuario(@Valid @RequestBody Usuario usuario) throws Exception {
+    public ResponseEntity<UsuarioDTO>  registrarUsuarioModelMapper(@Valid @RequestBody UsuarioDTO usuarioDTO) throws Exception {
+
+
+        Usuario usuario=new ModelMapper().map(usuarioDTO,Usuario.class);
 
         Usuario usuarioRegistrar=usuarioService.registrarUsuario(usuario);
         URI location= ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(usuarioRegistrar.getIdUsuario()).toUri();
@@ -68,20 +74,22 @@ public class usuarioController {
     }
 
 
+
+
+
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> modificarUsuario(@PathVariable("id") Integer id, @RequestBody Usuario usuarioForm) throws Exception {
+    public ResponseEntity<UsuarioDTO> modificarModelMapperUsuario(@PathVariable("id") Integer id, @RequestBody UsuarioDTO usuarioDTO) throws Exception {
 
         Usuario usuarioModificar=usuarioService.listarUsuarioPorId(id);
         if(usuarioModificar.getIdUsuario()==null){
             throw new ModeloNotFoundException("Id de Usuario No Encontrado: "+id);
         }
-        usuarioModificar.setNombre(usuarioForm.getNombre());
-        usuarioModificar.setApellidos(usuarioForm.getApellidos());
-        usuarioModificar.setEmail(usuarioForm.getEmail());
-        usuarioModificar.setPassword(usuarioForm.getPassword());
-        usuarioModificar.setRol(usuarioForm.getRol());
+        new ModelMapper().map(usuarioDTO,usuarioModificar);
 
-        return  new ResponseEntity<>(usuarioService.modificarUsuario(usuarioModificar),HttpStatus.OK);
+        Usuario usuario=usuarioService.modificarUsuario(usuarioModificar);
+        new ModelMapper().map(usuario,usuarioDTO);
+
+        return ResponseEntity.ok().body(usuarioDTO);
     }
 
     @DeleteMapping("/{id}")

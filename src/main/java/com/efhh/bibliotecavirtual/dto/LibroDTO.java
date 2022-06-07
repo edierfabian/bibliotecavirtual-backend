@@ -1,23 +1,27 @@
 package com.efhh.bibliotecavirtual.dto;
 
 import javax.persistence.Column;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 public class LibroDTO {
 
-    @Size(min = 3,message = "Titulo debe tener minimo 3 caracteres")
+    @Size(min = 3, max = 100, message = "El título debe tener {min} caracteres como mínimo y {max} caracteres como máximo")
+    @NotNull(message = "El título es obligatorio")
     private String titulo;
 
-    @Size(min = 3,message = "Slug debe tener minimo 3 caracteres")
+    @NotNull(message = "El slug es obligatorio")
+    @Pattern(regexp = "[a-z0-9-]+", message = "El slug debe tener un formato válido")
     private String slug;
 
-    @Size(min = 3,message = "Descripcion debe tener minimo 3 caracteres")
+    @NotBlank(message = "La descripción es obligatoria")
     private String descripcion;
-
+    @NotBlank(message = "La portada es obligatoria")
     private String rutaPortada;
 
+    @NotBlank(message = "El Archivo es obligatoria")
     private String rutaArchivo;
-
+    @NotNull(message = "El precio es obligatorio")
+    @PositiveOrZero(message = "El precio debe ser mayor o igual a 0")
     private Float precio;
 
     public String getTitulo() {
