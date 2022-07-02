@@ -79,21 +79,6 @@ public class LibroController {
         return   ResponseEntity.created(location).build();
     }
 
-   /* @PutMapping("/{id}")
-    public ResponseEntity<Libro> modificarLibro(@PathVariable("id") Integer id, @RequestBody Libro libroForm) throws Exception {
-
-        Libro libroModificar=libroService.listarPorId(id);
-        if(libroModificar.getIdLibro()==null){
-            throw new ModeloNotFoundException("Id No Encontrado: "+id);
-        }
-        libroModificar.setTitulo(libroForm.getTitulo());
-        libroModificar.setSlug(libroForm.getSlug());
-        libroModificar.setDescripcion(libroForm.getDescripcion());
-        libroModificar.setPrecio(libroForm.getPrecio());
-
-        return  new ResponseEntity<>(libroService.modificar(libroModificar),HttpStatus.OK);
-    }*/
-
     @PutMapping("/{id}")
     public ResponseEntity<LibroDTO> modificarLibro(@Validated @PathVariable("id") Integer id, @RequestBody LibroDTO libroDTO) throws Exception {
 
@@ -109,9 +94,6 @@ public class LibroController {
 
 
     }
-
-
-
 
 
     @DeleteMapping("/{id}")

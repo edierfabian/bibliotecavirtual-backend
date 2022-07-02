@@ -4,9 +4,8 @@ import javax.persistence.Column;
 import javax.validation.constraints.*;
 
 public class LibroDTO {
-
-    @Size(min = 3, max = 100, message = "El título debe tener {min} caracteres como mínimo y {max} caracteres como máximo")
     @NotNull(message = "El título es obligatorio")
+    @Size(min = 3, max = 100, message = "El título debe tener {min} caracteres como mínimo y {max} caracteres como máximo")
     private String titulo;
 
     @NotNull(message = "El slug es obligatorio")

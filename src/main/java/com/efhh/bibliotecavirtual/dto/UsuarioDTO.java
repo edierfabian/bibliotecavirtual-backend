@@ -7,15 +7,28 @@ import lombok.Data;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 
 public class UsuarioDTO {
 
+    @NotNull(message = "El Nombre es obligatorio")
     private String nombre;
+    @NotNull(message = "El título es obligatorio")
     private String apellidos;
+    @NotNull(message = "El título es obligatorio")
+    @Pattern(regexp = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+            + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$", message = "El Email debe tener un formato válido")
+    @Email(message = "Error de formato de correo electrónico")
     private String email;
-    private String password;
 
+    @NotNull(message = "El Password es obligatorio")
+    @Size(min = 8, max = 16, message = "El password debe tener {min} caracteres como mínimo y {max} caracteres como máximo")
+    private String password;
+    @NotNull(message = "El Rol es obligatorio")
     @Enumerated(EnumType.STRING)
     private Rol rol;
 

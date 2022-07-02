@@ -13,6 +13,7 @@ public class ItemVenta {
     @Column(name="numDescDisp")
     private Integer numDescargaDisponible;
 
+
     @ManyToOne
     @JoinColumn(name = "id_libro", nullable = false,foreignKey =@ForeignKey (name="FK_itemventa_libro"))
     private Libro libro;

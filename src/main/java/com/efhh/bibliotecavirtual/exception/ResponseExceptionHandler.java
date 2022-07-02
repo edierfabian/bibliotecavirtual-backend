@@ -30,6 +30,12 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<ExceptionResponse>(er, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(SFileNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> manejarSFileNotFoundException(SFileNotFoundException ex, WebRequest request){
+        ExceptionResponse er = new ExceptionResponse(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<ExceptionResponse>(er, HttpStatus.NOT_FOUND);
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         String mensaje = ex.getBindingResult().getAllErrors().stream().map(e -> {
