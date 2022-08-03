@@ -1,5 +1,6 @@
 package com.efhh.bibliotecavirtual.service;
 
+import com.efhh.bibliotecavirtual.exception.RestExceptionHandler;
 import com.efhh.bibliotecavirtual.model.Libro;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,7 +10,7 @@ import java.util.Optional;
 
 public interface ILibroService {
 
-    Libro registrar(Libro libro) throws Exception;
+    Libro registrar(Libro libro) throws RestExceptionHandler;
     Libro modificar(Libro libro) throws Exception;
     List<Libro> listar() throws Exception;
     Optional<Libro> listarPorIdOptional(Integer id) ;

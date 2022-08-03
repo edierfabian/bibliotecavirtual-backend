@@ -2,15 +2,13 @@ package com.efhh.bibliotecavirtual.controller;
 
 import com.efhh.bibliotecavirtual.dto.LibroDTO;
 import com.efhh.bibliotecavirtual.exception.ModeloNotFoundException;
+import com.efhh.bibliotecavirtual.exception.RestExceptionHandler;
 import com.efhh.bibliotecavirtual.model.Libro;
 import com.efhh.bibliotecavirtual.service.ILibroService;
-import com.efhh.bibliotecavirtual.service.impl.LibroServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
@@ -18,11 +16,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-import javax.persistence.EntityNotFoundException;
 
-import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -43,17 +40,25 @@ public class LibroController {
     public ResponseEntity<Libro> listarPorId(@PathVariable("id")Integer id) throws Exception {
         Libro libroPorId=libroService.listarPorId(id);
         if(libroPorId.getIdLibro()==null){
-            throw new ModeloNotFoundException("Id No Encontrado: "+id);
+            throw new ModeloNotFoundException("Id No Encontradodd: "+id);
         }
         return new ResponseEntity<Libro>(libroPorId,HttpStatus.OK);
     }
 
-  /*  @PostMapping
+  /*@PostMapping
     public ResponseEntity<Libro>  registrar(@Valid @RequestBody Libro libro) throws Exception {
         Libro libroRegistrar=libroService.registrar(libro);
 
         return  new ResponseEntity<Libro>(libroRegistrar,HttpStatus.CREATED);
     }*/
+  /*@ResponseStatus(HttpStatus.CREATED)
+  @PostMapping
+  Libro crear(@Validated @RequestBody LibroDTO libroDTO) throws RestExceptionHandler {
+      Libro libro = new ModelMapper().map(libroDTO, Libro.class);
+      Libro registrar = libroService.registrar(libro);
+      return registrar;
+  }*/
+
 
     @GetMapping("/hateos/{id}")
     public EntityModel<Libro> listarPorIdHateos(@PathVariable("id") Integer id) throws Exception{
@@ -69,7 +74,7 @@ public class LibroController {
     }
 
     @PostMapping
-    public ResponseEntity<LibroDTO>  registrarLibroModelMapper(@Validated @RequestBody LibroDTO libroDTO) throws Exception {
+    public ResponseEntity<LibroDTO>  registrarLibroModelMapper(@Validated @RequestBody LibroDTO libroDTO) throws RestExceptionHandler {
 
         Libro libro=new ModelMapper().map(libroDTO,Libro.class);
         Libro libroRegistrar=libroService.registrar(libro);

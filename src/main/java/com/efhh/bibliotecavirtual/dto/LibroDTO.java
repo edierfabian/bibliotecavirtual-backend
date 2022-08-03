@@ -1,8 +1,11 @@
 package com.efhh.bibliotecavirtual.dto;
 
+import lombok.Data;
+
 import javax.persistence.Column;
 import javax.validation.constraints.*;
 
+@Data
 public class LibroDTO {
     @NotNull(message = "El título es obligatorio")
     @Size(min = 3, max = 100, message = "El título debe tener {min} caracteres como mínimo y {max} caracteres como máximo")

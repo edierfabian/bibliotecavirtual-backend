@@ -1,5 +1,6 @@
 package com.efhh.bibliotecavirtual.service.impl;
 
+import com.efhh.bibliotecavirtual.exception.RestExceptionHandler;
 import com.efhh.bibliotecavirtual.model.Libro;
 import com.efhh.bibliotecavirtual.repository.ILibroRepository;
 import com.efhh.bibliotecavirtual.service.ILibroService;
@@ -17,7 +18,7 @@ public class LibroServiceImpl implements ILibroService {
     @Autowired
     private ILibroRepository libroRepository;
     @Override
-    public Libro registrar(Libro libro) throws Exception {
+    public Libro registrar(Libro libro) throws RestExceptionHandler {
         return libroRepository.save(libro);
     }
 
